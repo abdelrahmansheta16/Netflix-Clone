@@ -16,7 +16,16 @@ import { redirectUser } from "../utils/redirectUser";
 
 export async function getServerSideProps(context) {
   const { userId, token } = await redirectUser(context);
-  
+
+  if (!userId) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
   const watchItAgainVideos = await getWatchItAgainVideos(userId, token);
   const favouritedVideos = await getMyList(userId, token);
 
